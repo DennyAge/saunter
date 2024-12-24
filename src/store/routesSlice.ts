@@ -1,40 +1,45 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface Route {
+export interface Route {
     id: string;
-    name: string;
+    title: string;
     shortDescription: string;
     fullDescription: string;
     length: number;
     favorite: boolean;
-    markers: Array<{ lat: number; lng: number }>;
+    markers: MarkerData[];
+}
+export interface MarkerData {
+    lat: number;
+    lng: number;
+    title: string;
+    id: string | number;
 }
 
 type RoutesState = {
     routes: Route[];
-    favorites: Route[];
-    searchQuery: string;
+
 };
 
 const initialState: RoutesState = {
   routes: [],
-  favorites: [],
-  searchQuery: ''
 };
 
 const routesSlice = createSlice( {
   name: 'routes',
   initialState,
   reducers: {
-    addRoute: ( state, action ) => {
-      state.routes.push( action.payload );
+    addRoute( state, action: PayloadAction<Route[]> ) {
+      state.routes = action.payload;
     },
-    deleteRoute: ( state, action ) => {
-      state.routes = state.routes.filter( route => route.id !== action.payload );
+    toggleFavorite( state, action: PayloadAction<string> ) {
+      const route = state.routes.find( ( route ) => route.id === action.payload );
+      if ( route ) {
+        route.favorite = !route.favorite;
+      }
     },
-    toggleFavorite: ( state, action ) => {
-      const route = state.routes.find( route => route.id === action.payload );
-      if ( route ) {route.favorite = !route.favorite;}
+    deleteRoute( state, action: PayloadAction<string> ) {
+      state.routes = state.routes.filter( ( route ) => route.id !== action.payload );
     },
   },
 } );

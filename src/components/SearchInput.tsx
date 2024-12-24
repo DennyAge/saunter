@@ -23,9 +23,7 @@ const SearchInput = ( { value, onChange } : SearchInputProps ) => {
             </InputAdornment>
           )
         }}
-        inputProps={{
-          'aria-label': 'Search ...'
-        }}
+
       />
     </Grid>
   );

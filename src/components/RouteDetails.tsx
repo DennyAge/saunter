@@ -1,84 +1,87 @@
-import  { useRef } from 'react';
-import GoogleMapReact from 'google-map-react';
-import { Button, Card, CardContent, Typography, Grid } from '@mui/material';
+import { Button, Typography, Box } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 
-import { Route } from './RouteList';
+
+import Map from './Map.tsx';
+import { Route } from '../store/routesSlice.ts';
 
 
 interface RouteDetailProps {
     route: Route;
-    onFavoriteToggle: ( id: string ) => void;
+    onFavoriteToggle: ( id: string, favorite: boolean ) => void;
     onDelete: ( id: string ) => void;
 }
 
+
 const RouteDetails = ( { route, onFavoriteToggle, onDelete } : RouteDetailProps ) => {
 
-  const mapRef = useRef<any>( null );
 
-  const handleFavoriteClick = () => {
-    onFavoriteToggle( route.id );
+  const handleFavoriteClick = ( route: Route, favorite: boolean ) => {
+    onFavoriteToggle( route.id, favorite );
   };
 
   const handleDeleteClick = () => {
     onDelete( route.id );
   };
 
-  const API_KEY =  'AIzaSyASul7xfn9NnTHxBG3bvuFA38UxbcSorek';
-
-  const renderMap = () => {
-    return (
-      <GoogleMapReact
-        bootstrapURLKeys={{ key: API_KEY }}
-        defaultCenter={{ lat: 37.7749, lng: -122.4194 }}
-        defaultZoom={10}
-        ref={mapRef}
-      >
-
-      </GoogleMapReact>
-    );
-  };
-
   if ( !route ) {
-    return <Typography variant="h6" className="route_details">Select a route to see details</Typography>;
+    return (
+      <Grid    size={{ xs: 12, sm: 12, md: 5 }}>
+        <Typography variant="h6" className="route_details">Select a route to see details</Typography>
+      </Grid>
+    );
   }
   return (
-    <div className="route_details">
-      <Card>
-        <CardContent>
-
-          <Typography variant="h5" gutterBottom>
-            {route.name}
-          </Typography>
-          <Typography variant="body1" color="textSecondary" paragraph>
-            {route.fullDescription}
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-                    Length: {route.length} km
-          </Typography>
-          <Grid item xs={12} md={8}>
-            <div style={{ height: '400px', width: '100%' }}>
-              {renderMap()}
-            </div>
-          </Grid>
-          <div>
-            <Button
-              variant="text"
-              color={route.favorite ? 'secondary' : 'primary'}
-              onClick={handleFavoriteClick}
-            >
-              {route.favorite ? 'Remove from Favorites' : 'Add to Favorites'}
-            </Button>
-            <Button
-              variant="text"
-              color="error"
-              onClick={handleDeleteClick}
-            >
-              Remove
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+    <Grid
+      size={{ xs: 12, sm: 12, md: 6 }}
+      sx={{
+        maxHeight: '100vh',
+        overflowY: 'auto',
+      }}
+    >
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        marginBottom="0.5em"
+      >
+        <Typography variant="h5">
+          {route.title}
+        </Typography>
+        <Typography variant="h5">
+          {route.length.toFixed( 2 )} km
+        </Typography>
+      </Box>
+      <Typography variant="body1" color="text.secondary" paragraph>
+        {route.fullDescription}
+      </Typography>
+      <Grid
+        sx={{
+          marginBottom: '2em',
+        }}
+      >
+        <Map
+          markers={route.markers}
+          isEditing={false}
+        />
+      </Grid>
+      <Box display="flex" flexDirection="column" alignItems="flex-end">
+        <Button
+          variant="text"
+          color={route.favorite ? 'secondary' : 'primary'}
+          onClick={() => handleFavoriteClick( route, !route.favorite )}
+        >
+          {route.favorite ? 'Remove from Favorites' : 'Add to Favorites'}
+        </Button>
+        <Button
+          variant="text"
+          color="error"
+          onClick={handleDeleteClick}
+        >
+            Remove
+        </Button>
+      </Box>
+    </Grid>
 
   );
 };

@@ -2,17 +2,11 @@ import { Card, CardContent, Typography, IconButton } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import { Route } from '../store/routesSlice.ts';
 
 interface RouteItemProps {
-    route: {
-        id: string;
-        name: string;
-        shortDescription: string;
-        fullDescription: string;
-        length: number;
-        favorite: boolean;
-    };
-    onFavoriteToggle: ( id: string ) => void;
+    route: Route
+    onFavoriteToggle: ( id: string, favorite: boolean ) => void;
 }
 
 const RouteCard = ( {
@@ -25,11 +19,11 @@ const RouteCard = ( {
         <ZoomOutMapIcon sx={{ fontSize: 40 }}/>
         <div>
           <div className="d-flex">
-            {route.favorite && <IconButton onClick={() => onFavoriteToggle( route.id )} color="primary">
+            {route.favorite && <IconButton onClick={() => onFavoriteToggle( route.id, false )} color="primary">
               <StarIcon/>
             </IconButton>}
             <Typography variant="h6" component="div">
-              {route.name}
+              {route.title}
             </Typography>
           </div>
           <Typography variant="body2" color="textSecondary">
@@ -37,7 +31,7 @@ const RouteCard = ( {
           </Typography>
         </div>
         <Typography variant="h6" color="textSecondary">
-          {route.length} km
+          {route.length.toFixed( 2 )} km
         </Typography>
 
         <KeyboardArrowRightIcon sx={{ fontSize: 40 }}/>
