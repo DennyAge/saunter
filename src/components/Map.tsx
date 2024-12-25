@@ -22,7 +22,8 @@ interface MapWithRoutesProps {
 const Map = ( { markers, isEditing, onMarkersChange }: MapWithRoutesProps ) => {
   const [ directions, setDirections ] = useState<google.maps.DirectionsResult | null>( null );
   const [ distance, setDistance ] = useState<number>( 0 );
-  const isSmallScreen = useMediaQuery( '(max-height:900px)' );
+  const isSmScreen = useMediaQuery( '(max-height:900px)' );
+  const isXsScreen = useMediaQuery( '(max-height:600px)' );
 
   const { isLoaded } = useLoadScript( {
     googleMapsApiKey: 'AIzaSyASul7xfn9NnTHxBG3bvuFA38UxbcSorek',
@@ -121,7 +122,7 @@ const Map = ( { markers, isEditing, onMarkersChange }: MapWithRoutesProps ) => {
         <AddLocationIcon/> Add marker
       </div>}
       <GoogleMap
-        mapContainerStyle={{ width: '100%', height: isSmallScreen ? '500px' : '600px' }}
+        mapContainerStyle={{  height: isXsScreen ? '300px' : ( isSmScreen ? '500px' : '600px' ),width: '100%'  }}
         center={markers.length > 0 ? markers[0] : { lat: -8.5069, lng: 115.2625 }}
         zoom={14}
         onClick={handleMapClick}

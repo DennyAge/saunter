@@ -204,6 +204,14 @@ body {
     .content__container {
         overflow: scroll;
     }
+
+    .block_left {
+        max-height: calc(60vh - 11.875rem);
+    }
+    .block_right {
+        height: 100%;
+        overflow: visible;
+    }
     .page__content {
         flex-direction: column;
     }
