@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface Route {
-    id: string;
+    id: string ;
     title: string;
     shortDescription: string;
     fullDescription: string;
@@ -18,11 +18,13 @@ export interface MarkerData {
 
 type RoutesState = {
     routes: Route[];
+    selectRoute: Route | null;
 
 };
 
 const initialState: RoutesState = {
   routes: [],
+  selectRoute: null
 };
 
 const routesSlice = createSlice( {
@@ -41,9 +43,12 @@ const routesSlice = createSlice( {
     deleteRoute( state, action: PayloadAction<string> ) {
       state.routes = state.routes.filter( ( route ) => route.id !== action.payload );
     },
+    setSelectedRoute( state, action: PayloadAction<Route> ) {
+      state.selectRoute = action.payload;
+    }
   },
 } );
 
-export const { addRoute, deleteRoute, toggleFavorite } = routesSlice.actions;
+export const { addRoute, deleteRoute, toggleFavorite, setSelectedRoute } = routesSlice.actions;
 export default routesSlice.reducer;
  

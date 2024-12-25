@@ -1,37 +1,38 @@
-import { Card, CardContent, Typography, IconButton } from '@mui/material';
+import { Card, CardContent, Typography } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+
+
 import { Route } from '../store/routesSlice.ts';
+import { formatDistance } from '../helpers';
 
 interface RouteItemProps {
     route: Route
-    onFavoriteToggle: ( id: string, favorite: boolean ) => void;
+    selectRouteId: string | null| undefined
 }
 
 const RouteCard = ( {
   route,
-  onFavoriteToggle,
+  selectRouteId
 } : RouteItemProps ) => {
   return (
     <Card variant="outlined">
-      <CardContent  className="d-flex space">
+      <CardContent  className={`${ route.id === selectRouteId ? 'active' : '' } card`} >
         <ZoomOutMapIcon sx={{ fontSize: 40 }}/>
         <div>
-          <div className="d-flex">
-            {route.favorite && <IconButton onClick={() => onFavoriteToggle( route.id, false )} color="primary">
-              <StarIcon/>
-            </IconButton>}
-            <Typography variant="h6" component="div">
+          <div className="card_title">
+            {route.favorite && <StarIcon color="primary" />}
+            <Typography variant="h6" >
               {route.title}
             </Typography>
           </div>
-          <Typography variant="body2" color="textSecondary">
+          <Typography variant="body2" >
             {route.shortDescription}
           </Typography>
         </div>
-        <Typography variant="h6" color="textSecondary">
-          {route.length.toFixed( 2 )} km
+        <Typography variant="h6" >
+          {formatDistance( route.length )}
         </Typography>
 
         <KeyboardArrowRightIcon sx={{ fontSize: 40 }}/>

@@ -1,55 +1,55 @@
-import SearchInput from './SearchInput.tsx';
-import Grid from '@mui/material/Grid2';
-import RouteCard from './RouteСard.tsx';
 import { useState } from 'react';
+import { Box } from '@mui/material';
+
 import { Route } from '../store/routesSlice.ts';
 
+import SearchInput from './SearchInput.tsx';
+import RouteCard from './RouteСard.tsx';
 
 
 interface RouteListProps {
     routes: Route[];
-    onFavoriteToggle: ( id: string ) => void;
     onRouteSelect: ( route: Route ) => void;
+    selectRouteId: string | null | undefined;
 }
 
-const RouteList = ( { routes, onFavoriteToggle, onRouteSelect } : RouteListProps ) => {
+const RouteList = ( { routes, onRouteSelect, selectRouteId } : RouteListProps ) => {
   const [ searchQuery, setSearchQuery ] = useState( '' );
 
   const filteredRoutes = routes.filter( route =>
     route.title.toLowerCase().includes( searchQuery.toLowerCase() ) ||
-        route.shortDescription.toLowerCase().includes( searchQuery.toLowerCase() )
+      route.fullDescription.toLowerCase().includes( searchQuery.toLowerCase() )
   );
 
   const sortedRoutes = filteredRoutes.sort( ( a, b ) => ( b.favorite ? 1 : 0 ) - ( a.favorite ? 1 : 0 ) );
 
+  const handleSelectRoute = ( route: Route ) => {
+    onRouteSelect( route );
+  };
+
   return (
-    <Grid size={{ xs: 12, sm: 12, md: 6 }}>
+    <div className="block">
       <SearchInput
         value={searchQuery}
         onChange={( e ) => setSearchQuery( e.target.value )}
       />
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          height: '100vh',
-          overflowY: 'auto',
-        }}
+      <div
+        className="block_left scrollable-content"
       >
         {sortedRoutes.map( ( route ) => (
-          <Grid
+          <Box
             key={route.id}
-            size={{ xs: 12 }}
-            onClick={() => onRouteSelect( route )}
+            onClick={() => handleSelectRoute( route )}
+            className="list_item"
           >
             <RouteCard
               route={route}
-              onFavoriteToggle={onFavoriteToggle}
+              selectRouteId={selectRouteId}
             />
-          </Grid>
+          </Box>
         ) )}
-      </Grid>
-    </Grid>
+      </div>
+    </div>
 
 
   );

@@ -1,12 +1,26 @@
 import { useEffect, useState } from 'react';
 import ClearIcon from '@mui/icons-material/Clear';
-import { Box, Button, TextField, Typography, IconButton, Dialog, DialogContent, DialogTitle, useMediaQuery, useTheme } from '@mui/material';
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  IconButton,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  useMediaQuery,
+  useTheme,
+  Divider
+} from '@mui/material';
 import MapIcon from '@mui/icons-material/Map';
 import Grid from '@mui/material/Grid2';
 import CheckIcon from '@mui/icons-material/Check';
 
 import Map from './Map.tsx';
+
 import { Route } from '../store/routesSlice.ts';
+import { formatDistance } from '../helpers';
 
 interface Props {
   onClose: ( b: boolean ) => void;
@@ -24,17 +38,17 @@ const AddRouteModal = ( { onClose, open, onAddRoute }: Props ) => {
     length: 0,
     markers: []
   } );
-  const [ formErrors, setFormErrors ] = useState( {
+  const [ formErrors, setFormErrors ] = useState<Record<string, string | undefined> >( {
     title: '',
     shortDescription: '',
     fullDescription: '',
-
+    markers: '',
   } );
 
   useEffect( () => {
     if ( !open ) {
-      setFormValues( { title: '', shortDescription: '', fullDescription: '', length: 0, markers: [],  favorite: false,  } );
-      setFormErrors( { title: '', shortDescription: '', fullDescription: '' } );
+      setFormValues( { title: '', shortDescription: '', fullDescription: '', length: 0, markers: [],  favorite: false } );
+      setFormErrors( { title: '', shortDescription: '', fullDescription: '', markers: '' } );
     }
   }, [ open ] );
 
@@ -55,7 +69,7 @@ const AddRouteModal = ( { onClose, open, onAddRoute }: Props ) => {
   };
 
   const validateForm = () => {
-    const errors: Record<string, string> = {};
+    const errors: Record<string, string | undefined> = {};
 
     if ( !formValues.title.trim() ) {
       errors.title = 'Title is required';
@@ -67,6 +81,9 @@ const AddRouteModal = ( { onClose, open, onAddRoute }: Props ) => {
     }
     if ( !formValues.fullDescription.trim() ) {
       errors.fullDescription = 'Full description is required';
+    }
+    if ( formValues.markers.length < 1 ) {
+      errors.markers = 'Marker is required';
     }
 
     setFormErrors( errors );
@@ -88,6 +105,11 @@ const AddRouteModal = ( { onClose, open, onAddRoute }: Props ) => {
       length: newLenght,
       markers: newMarker,
     } ) );
+
+    setFormErrors( ( prev ) => ( {
+      ...prev,
+      markers: '',
+    } ) );
   };
 
   return (
@@ -106,19 +128,16 @@ const AddRouteModal = ( { onClose, open, onAddRoute }: Props ) => {
           </IconButton>
         </Box>
       </DialogTitle>
+      <Divider orientation="horizontal"  flexItem/>
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <Grid
             container
             spacing={2}
-            sx={{ height: '100%' }}
           >
             <Grid
-              size={{ xs: 12, md: 6 }}
-              sx={{
-                borderRight: { md: '1px solid grey' },
-                padding: '10px',
-              }}
+              size={{ xs: 12, md: 5.85 }}
+
             >
               <Box marginBottom="15px">
                 <Typography variant="subtitle1">Title</Typography>
@@ -155,7 +174,7 @@ const AddRouteModal = ( { onClose, open, onAddRoute }: Props ) => {
                 </Box>
               </Box>
 
-              <Box marginBottom="15px">
+              <Box className="mb-15">
                 <Typography variant="subtitle1">Full Description</Typography>
                 <TextField
                   fullWidth
@@ -170,13 +189,14 @@ const AddRouteModal = ( { onClose, open, onAddRoute }: Props ) => {
                   helperText={formErrors.fullDescription}
                 />
               </Box>
-
-              <Box marginBottom="15px" justifyContent="center" display="flex" alignItems="center" gap="8px">
+              <Box className="flex-center mb-15">
                 <MapIcon />
-                <Typography variant="h6">Length: {formValues.length.toFixed( 2 )} km</Typography>
+                <Typography variant="h6">
+                  Length {formatDistance( formValues.length )}
+                </Typography>
               </Box>
 
-              <Box display="flex" justifyContent="center" alignItems="center">
+              <Box className="flex-center">
                 <Button
                   variant="outlined"
                   startIcon={<CheckIcon />}
@@ -187,18 +207,28 @@ const AddRouteModal = ( { onClose, open, onAddRoute }: Props ) => {
                 </Button>
               </Box>
             </Grid>
+            <Divider
+              orientation={isSmallScreen ? 'horizontal' : 'vertical'}
+              flexItem
+            />
             <Grid
-              size={{ xs: 12, md: 6 }}
-              sx={{
-                height: '100%',
-              }}
+              size={{ xs: 12, md: 5.85 }}
             >
               <Map
                 markers={formValues.markers}
                 isEditing={true}
                 onMarkersChange={handleAddMarker}
               />
+              {!!formErrors.markers &&
+                  <Typography
+                    variant="body2"
+                    color="error"
+                    marginTop="10px"
+                  >
+                    {formErrors.markers}
+                  </Typography>}
             </Grid>
+
           </Grid>
         </form>
       </DialogContent>

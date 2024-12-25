@@ -6,8 +6,11 @@ import {
   useLoadScript,
 } from '@react-google-maps/api';
 
-import { CircularProgress, Stack } from '@mui/material';
+import { useMediaQuery } from '@mui/material';
+import AddLocationIcon from '@mui/icons-material/AddLocation';
+
 import { MarkerData } from '../store/routesSlice';
+import Loader from './Loader.tsx';
 
 
 interface MapWithRoutesProps {
@@ -19,9 +22,10 @@ interface MapWithRoutesProps {
 const Map = ( { markers, isEditing, onMarkersChange }: MapWithRoutesProps ) => {
   const [ directions, setDirections ] = useState<google.maps.DirectionsResult | null>( null );
   const [ distance, setDistance ] = useState<number>( 0 );
+  const isSmallScreen = useMediaQuery( '(max-height:900px)' );
 
   const { isLoaded } = useLoadScript( {
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey: 'AIzaSyASul7xfn9NnTHxBG3bvuFA38UxbcSorek',
     libraries: [ 'places', 'geometry' ]
   } );
 
@@ -107,33 +111,39 @@ const Map = ( { markers, isEditing, onMarkersChange }: MapWithRoutesProps ) => {
   };
 
   if ( !isLoaded ) {
-    return (
-      <Stack
-        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '400px' }}
-      >
-        <CircularProgress />
-      </Stack>
-    );
+    return <Loader />;
   }
 
-  return (
 
-    <GoogleMap
-      mapContainerStyle={{ width: '100%', height: '300px' }}
-      center={markers.length > 0 ? markers[0] : { lat: 40.4093, lng: 49.8671 }}
-      zoom={14}
-      onClick={handleMapClick}
-    >
-      {markers.map( ( marker, index ) => (
-        <MarkerF
-          key={marker.id}
-          position={{ lat: marker.lat, lng: marker.lng }}
-          title={marker.title}
-          onClick={() => handleMarkerClick( index )}
-        />
-      ) )}
-      {renderPolyline()}
-    </GoogleMap>
+  return (
+    <div className="map">
+      {isEditing && <div className="map_label">
+        <AddLocationIcon/> Add marker
+      </div>}
+      <GoogleMap
+        mapContainerStyle={{ width: '100%', height: isSmallScreen ? '500px' : '600px' }}
+        center={markers.length > 0 ? markers[0] : { lat: -8.5069, lng: 115.2625 }}
+        zoom={14}
+        onClick={handleMapClick}
+        options={{
+          disableDefaultUI: true,
+          zoomControl: false,
+          mapTypeControl: false,
+          streetViewControl: false,
+          fullscreenControl: false,
+        }}
+      >
+        {markers.map( ( marker, index ) => (
+          <MarkerF
+            key={marker.id}
+            position={{ lat: marker.lat, lng: marker.lng }}
+            title={marker.title}
+            onClick={() => handleMarkerClick( index )}
+          />
+        ) )}
+        {renderPolyline()}
+      </GoogleMap>
+    </div>
   );
 };
 

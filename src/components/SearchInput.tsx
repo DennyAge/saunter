@@ -1,6 +1,7 @@
 import React from 'react';
-import { TextField, Grid,InputAdornment } from '@mui/material';
+import { TextField,InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+
 
 interface SearchInputProps {
   value: string;
@@ -9,7 +10,7 @@ interface SearchInputProps {
 
 const SearchInput = ( { value, onChange } : SearchInputProps ) => {
   return (
-    <Grid container justifyContent="center" style={{ marginBottom: '20px' }}>
+    <div className="search">
       <TextField
         fullWidth
         placeholder="Search ..."
@@ -25,7 +26,7 @@ const SearchInput = ( { value, onChange } : SearchInputProps ) => {
         }}
 
       />
-    </Grid>
+    </div>
   );
 };
 

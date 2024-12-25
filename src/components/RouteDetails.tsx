@@ -3,15 +3,17 @@ import Grid from '@mui/material/Grid2';
 
 
 import Map from './Map.tsx';
+
 import { Route } from '../store/routesSlice.ts';
+import EmptyContent from './EmptyContent.tsx';
+import { formatDistance } from '../helpers';
 
 
 interface RouteDetailProps {
-    route: Route;
+    route: Route | null;
     onFavoriteToggle: ( id: string, favorite: boolean ) => void;
     onDelete: ( id: string ) => void;
 }
-
 
 const RouteDetails = ( { route, onFavoriteToggle, onDelete } : RouteDetailProps ) => {
 
@@ -20,24 +22,17 @@ const RouteDetails = ( { route, onFavoriteToggle, onDelete } : RouteDetailProps 
     onFavoriteToggle( route.id, favorite );
   };
 
-  const handleDeleteClick = () => {
+  const handleDeleteClick = ( route: Route ) => {
     onDelete( route.id );
   };
 
   if ( !route ) {
-    return (
-      <Grid    size={{ xs: 12, sm: 12, md: 5 }}>
-        <Typography variant="h6" className="route_details">Select a route to see details</Typography>
-      </Grid>
-    );
+    return <EmptyContent/>;
   }
   return (
-    <Grid
-      size={{ xs: 12, sm: 12, md: 6 }}
-      sx={{
-        maxHeight: '100vh',
-        overflowY: 'auto',
-      }}
+    <div
+
+      className="block scrollable-content block_right"
     >
       <Box
         display="flex"
@@ -49,10 +44,10 @@ const RouteDetails = ( { route, onFavoriteToggle, onDelete } : RouteDetailProps 
           {route.title}
         </Typography>
         <Typography variant="h5">
-          {route.length.toFixed( 2 )} km
+          {formatDistance( route.length )}
         </Typography>
       </Box>
-      <Typography variant="body1" color="text.secondary" paragraph>
+      <Typography variant="body1" color="text.secondary" >
         {route.fullDescription}
       </Typography>
       <Grid
@@ -63,6 +58,7 @@ const RouteDetails = ( { route, onFavoriteToggle, onDelete } : RouteDetailProps 
         <Map
           markers={route.markers}
           isEditing={false}
+          onMarkersChange={() => null}
         />
       </Grid>
       <Box display="flex" flexDirection="column" alignItems="flex-end">
@@ -70,18 +66,20 @@ const RouteDetails = ( { route, onFavoriteToggle, onDelete } : RouteDetailProps 
           variant="text"
           color={route.favorite ? 'secondary' : 'primary'}
           onClick={() => handleFavoriteClick( route, !route.favorite )}
+          className="btn"
         >
           {route.favorite ? 'Remove from Favorites' : 'Add to Favorites'}
         </Button>
         <Button
           variant="text"
           color="error"
-          onClick={handleDeleteClick}
+          onClick={() => handleDeleteClick( route )}
+          className="btn"
         >
             Remove
         </Button>
       </Box>
-    </Grid>
+    </div>
 
   );
 };
