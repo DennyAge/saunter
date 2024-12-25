@@ -19,13 +19,23 @@ import CheckIcon from '@mui/icons-material/Check';
 
 import Map from './Map.tsx';
 
-import { Route } from '../store/routesSlice.ts';
+
 import { formatDistance } from '../helpers';
+import { MarkerData } from '../store/routesSlice.ts';
+
+export interface AddRoute {
+  title: string;
+  shortDescription: string;
+  fullDescription: string;
+  length: number;
+  favorite: boolean;
+  markers: MarkerData[];
+}
 
 interface Props {
   onClose: ( b: boolean ) => void;
   open: boolean;
-  onAddRoute: ( route: Route ) => void ;
+  onAddRoute: ( route: AddRoute ) => void ;
 }
 
 

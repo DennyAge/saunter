@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface Route {
-    id: string ;
+    id: string;
     title: string;
     shortDescription: string;
     fullDescription: string;
@@ -9,6 +9,7 @@ export interface Route {
     favorite: boolean;
     markers: MarkerData[];
 }
+
 export interface MarkerData {
     lat: number;
     lng: number;
@@ -43,7 +44,7 @@ const routesSlice = createSlice( {
     deleteRoute( state, action: PayloadAction<string> ) {
       state.routes = state.routes.filter( ( route ) => route.id !== action.payload );
     },
-    setSelectedRoute( state, action: PayloadAction<Route> ) {
+    setSelectedRoute( state, action: PayloadAction<Route | null> ) {
       state.selectRoute = action.payload;
     }
   },

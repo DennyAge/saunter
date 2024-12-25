@@ -10,7 +10,7 @@ import { db } from '../firebase.ts';
 import Header from '../components/Header.tsx';
 import RouteList from '../components/RouteList.tsx';
 import RouteDetails from '../components/RouteDetails.tsx';
-import AddRouteModal from '../components/AddRouteModal.tsx';
+import AddRouteModal, { AddRoute } from '../components/AddRouteModal.tsx';
 import EmptyContent from '../components/EmptyContent.tsx';
 import Loader from '../components/Loader.tsx';
 
@@ -32,13 +32,15 @@ const DashboardPage = () => {
         id: doc.id,
         ...doc.data(),
       } ) );
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       dispatch( addRoute( routesData ) );
     };
 
     fetchRoutes();
   }, [ dispatch ] );
 
-  const handleAddRoute = async ( newRoute: Route ) => {
+  const handleAddRoute = async ( newRoute: AddRoute ) => {
     setIsLoading( true );
 
     const docRef = await addDoc( collection( db, 'routes' ), newRoute );
