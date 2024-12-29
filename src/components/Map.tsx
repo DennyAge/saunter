@@ -18,16 +18,17 @@ interface MapWithRoutesProps {
   isEditing: boolean;
   onMarkersChange: ( markers: MarkerData[], length: number ) => void;
 }
+const LIBRARIES: ( 'places' | 'geometry' )[] = [ 'places', 'geometry' ];
 
 const Map = ( { markers, isEditing, onMarkersChange }: MapWithRoutesProps ) => {
   const [ directions, setDirections ] = useState<google.maps.DirectionsResult | null>( null );
   const [ distance, setDistance ] = useState<number>( 0 );
   const isSmScreen = useMediaQuery( '(max-height:900px)' );
-  const isXsScreen = useMediaQuery( '(max-height:600px)' );
+  const isXsScreen = useMediaQuery( '(max-width:600px)' );
 
   const { isLoaded } = useLoadScript( {
     googleMapsApiKey: 'AIzaSyASul7xfn9NnTHxBG3bvuFA38UxbcSorek',
-    libraries: [ 'places', 'geometry' ]
+    libraries: LIBRARIES
   } );
 
   useEffect( () => {
