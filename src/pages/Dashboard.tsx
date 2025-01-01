@@ -27,14 +27,27 @@ const DashboardPage = () => {
 
   useEffect( () => {
     const fetchRoutes = async () => {
-      const querySnapshot = await getDocs( collection( db, 'routes' ) );
-      const routesData = querySnapshot.docs.map( ( doc ) => ( {
-        id: doc.id,
-        ...doc.data(),
-      } ) );
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      dispatch( addRoute( routesData ) );
+      setIsLoading( true );
+      try {
+        const querySnapshot = await getDocs( collection( db, 'routes' ) );
+        const routesData: Route[] = querySnapshot.docs.map( ( doc ) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            title: data.title || '',
+            shortDescription: data.shortDescription || '',
+            fullDescription: data.fullDescription || '',
+            length: data.length || 0,
+            favorite: data.favorite || false,
+            markers: data.markers || [],
+          };
+        } );
+        dispatch( addRoute( routesData ) );
+      } catch ( error ) {
+        console.error( 'Failed to fetch routes:', error );
+      } finally {
+        setIsLoading( false );
+      }
     };
 
     fetchRoutes();
