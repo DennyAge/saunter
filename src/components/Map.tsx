@@ -27,7 +27,7 @@ const Map = ( { markers, isEditing, onMarkersChange }: MapWithRoutesProps ) => {
   const isXsScreen = useMediaQuery( '(max-width:600px)' );
 
   const { isLoaded } = useLoadScript( {
-    googleMapsApiKey: '',
+    googleMapsApiKey: 'AIzaSyD1zCO5mAd1PHFpKNTEhud73ika1U_BlkA',
     libraries: LIBRARIES
   } );
 
