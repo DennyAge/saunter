@@ -2,10 +2,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Divider, useMediaQuery } from '@mui/material';
 
-import { addRoute, deleteRoute, Route, toggleFavorite, setSelectedRoute } from '../store/routesSlice.ts';
+import { addRoute, deleteRoute, toggleFavorite, setSelectedRoute, Route } from '../store/routesSlice.ts';
 import { RootState } from '../store';
-import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase.ts';
+import { fetchRoutes, addRouteToFirebase, updateRouteFavoriteStatus, deleteRouteFromFirebase } from '../services/firebaseService.ts';
 
 import Header from '../components/Header.tsx';
 import RouteList from '../components/RouteList.tsx';
@@ -16,9 +15,7 @@ import Loader from '../components/Loader.tsx';
 
 const DashboardPage = () => {
   const dispatch = useDispatch();
-
-  const routes = useSelector( ( state: RootState ) => state.routes.routes );
-  const selectedRoute = useSelector( ( state: RootState ) => state.routes.selectRoute );
+  const { routes, selectRoute } = useSelector( ( state: RootState ) => state.routes );
 
   const [ openAddModal, setOpenAddModal ] = useState( false );
   const [ isLoading, setIsLoading ] = useState( false );
@@ -26,22 +23,10 @@ const DashboardPage = () => {
   const isSmallScreen = useMediaQuery( '(max-width:900px)' );
 
   useEffect( () => {
-    const fetchRoutes = async () => {
+    const loadRoutes = async () => {
       setIsLoading( true );
       try {
-        const querySnapshot = await getDocs( collection( db, 'routes' ) );
-        const routesData: Route[] = querySnapshot.docs.map( ( doc ) => {
-          const data = doc.data();
-          return {
-            id: doc.id,
-            title: data.title || '',
-            shortDescription: data.shortDescription || '',
-            fullDescription: data.fullDescription || '',
-            length: data.length || 0,
-            favorite: data.favorite || false,
-            markers: data.markers || [],
-          };
-        } );
+        const routesData = await fetchRoutes();
         dispatch( addRoute( routesData ) );
       } catch ( error ) {
         console.error( 'Failed to fetch routes:', error );
@@ -50,17 +35,20 @@ const DashboardPage = () => {
       }
     };
 
-    fetchRoutes();
+    loadRoutes();
   }, [ dispatch ] );
 
   const handleAddRoute = async ( newRoute: AddRoute ) => {
     setIsLoading( true );
-
-    const docRef = await addDoc( collection( db, 'routes' ), newRoute );
-    dispatch( addRoute( [ ...routes, { id: docRef.id, ...newRoute } ] ) );
-    dispatch( setSelectedRoute( { id: docRef.id, ...newRoute }  ) );
-
-    setIsLoading( false );
+    try {
+      const addedRoute = await addRouteToFirebase( newRoute );
+      dispatch( addRoute( [ addedRoute ] ) );
+      dispatch( setSelectedRoute( addedRoute ) );
+    } catch ( error ) {
+      console.error( 'Failed to add route:', error );
+    } finally {
+      setIsLoading( false );
+    }
   };
 
   const handleSelectRoute = ( route: Route ) => {
@@ -68,54 +56,53 @@ const DashboardPage = () => {
   };
 
   const handleFavoriteToggle = async ( id: string, favorite: boolean ) => {
-    const docRef = doc( db, 'routes', id );
-    await updateDoc( docRef, { favorite } );
-
-    dispatch( toggleFavorite( id ) );
-    if ( selectedRoute && selectedRoute.id === id ) {
-      dispatch(
-        setSelectedRoute( {
-          ...selectedRoute,
-          favorite: favorite,
-        } )
-      );
+    try {
+      await updateRouteFavoriteStatus( id, favorite );
+      dispatch( toggleFavorite( id ) );
+      if ( selectRoute && selectRoute.id === id ) {
+        dispatch( setSelectedRoute( { ...selectRoute, favorite } ) );
+      }
+    } catch ( error ) {
+      console.error( 'Failed to update favorite status:', error );
     }
   };
+
   const handleDeleteRoute = async ( id: string ) => {
-    await deleteDoc( doc( db, 'routes', id ) );
-    dispatch( deleteRoute( id ) );
-
-    if ( selectedRoute?.id === id ) {
-      dispatch( setSelectedRoute( null ) );
+    try {
+      await deleteRouteFromFirebase( id );
+      dispatch( deleteRoute( id ) );
+      if ( selectRoute?.id === id ) {
+        dispatch( setSelectedRoute( null ) );
+      }
+    } catch ( error ) {
+      console.error( 'Failed to delete route:', error );
     }
   };
+
   return (
     <div className="main">
-      {isLoading && <Loader/>}
+      {isLoading && <Loader />}
       <div className="content">
-        <Header openModal={setOpenAddModal}/>
-        <div className="content__container" >
-          <Divider
-            orientation="horizontal"  flexItem className="divider"
-          />
-          {routes.length ? <div className="page__content">
-            <RouteList
-              routes={routes}
-              onRouteSelect={handleSelectRoute}
-              selectRouteId={selectedRoute?.id}
-            />
-            <Divider
-              orientation={isSmallScreen ? 'horizontal' : 'vertical'}
-              flexItem
-            />
-            <RouteDetails
-              route={selectedRoute}
-              onFavoriteToggle={handleFavoriteToggle}
-              onDelete={handleDeleteRoute}
-            />
-          </div> : <EmptyContent text="Pleace add new path"  />
-          }
-
+        <Header openModal={setOpenAddModal} />
+        <div className="content__container">
+          <Divider orientation="horizontal" flexItem className="divider" />
+          {routes.length ? (
+            <div className="page__content">
+              <RouteList
+                routes={routes}
+                onRouteSelect={handleSelectRoute}
+                selectRouteId={selectRoute?.id}
+              />
+              <Divider orientation={isSmallScreen ? 'horizontal' : 'vertical'} flexItem />
+              <RouteDetails
+                route={selectRoute}
+                onFavoriteToggle={handleFavoriteToggle}
+                onDelete={handleDeleteRoute}
+              />
+            </div>
+          ) : (
+            <EmptyContent text="Please add new path" />
+          )}
         </div>
       </div>
       <AddRouteModal
@@ -124,8 +111,7 @@ const DashboardPage = () => {
         onAddRoute={handleAddRoute}
       />
     </div>
-
   );
 };
 
-export default DashboardPage;
+export default DashboardPage; 
