@@ -37,9 +37,9 @@ const RouteDetails = ( { route, onFavoriteToggle, onDelete } : RouteDetailProps 
       <div
         className="details-header"
       >
-        <Typography variant="h5" className="title">
+        <h5 className="title">
           {route.title}
-        </Typography>
+        </h5>
         <Typography variant="h5" className="distance">
           {formatDistance( route.length )}
         </Typography>
