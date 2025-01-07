@@ -20,7 +20,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import Map from './Map.tsx';
 
 
-import { formatDistance } from '../helpers';
+import { formatDistance } from '@/helpers';
 import { MarkerData } from '../store/routesSlice.ts';
 
 export interface AddRoute {
@@ -160,6 +160,9 @@ const AddRouteModal = ( { onClose, open, onAddRoute }: Props ) => {
                   placeholder="Enter route title"
                   error={!!formErrors.title}
                   helperText={formErrors.title}
+                  inputProps={{
+                    maxLength: 50,
+                  }}
                 />
               </Box>
               <Box marginBottom="15px">

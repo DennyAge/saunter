@@ -2,16 +2,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Divider, useMediaQuery } from '@mui/material';
 
-import { addRoute, deleteRoute, toggleFavorite, setSelectedRoute, Route } from '../store/routesSlice.ts';
-import { RootState } from '../store';
-import { fetchRoutes, addRouteToFirebase, updateRouteFavoriteStatus, deleteRouteFromFirebase } from '../services/firebaseService.ts';
+import { addRoute, deleteRoute, toggleFavorite, setSelectedRoute, Route } from '@/store/routesSlice.ts';
+import { RootState } from '@/store';
+import { fetchRoutes, addRouteToFirebase, updateRouteFavoriteStatus, deleteRouteFromFirebase } from '@/services/firebaseService.ts';
 
-import Header from '../components/Header.tsx';
-import RouteList from '../components/RouteList.tsx';
-import RouteDetails from '../components/RouteDetails.tsx';
-import AddRouteModal, { AddRoute } from '../components/AddRouteModal.tsx';
-import EmptyContent from '../components/EmptyContent.tsx';
-import Loader from '../components/Loader.tsx';
+import Header from '@/components/Header.tsx';
+import RouteList from '@/components/RouteList';
+import RouteDetails from '@/components/RouteDetails.tsx';
+import AddRouteModal, { AddRoute } from '@/components/AddRouteModal.tsx';
+import EmptyContent from '@/components/EmptyContent.tsx';
+import Loader from '@components/Loader.tsx';
+
+
 
 const DashboardPage = () => {
   const dispatch = useDispatch();
@@ -36,13 +38,13 @@ const DashboardPage = () => {
     };
 
     loadRoutes();
-  }, [ dispatch ] );
+  }, [] );
 
   const handleAddRoute = async ( newRoute: AddRoute ) => {
     setIsLoading( true );
     try {
       const addedRoute = await addRouteToFirebase( newRoute );
-      dispatch( addRoute( [ addedRoute ] ) );
+      dispatch( addRoute( [ ...routes, { id: addedRoute.id, ...newRoute } ] ) );
       dispatch( setSelectedRoute( addedRoute ) );
     } catch ( error ) {
       console.error( 'Failed to add route:', error );
@@ -59,8 +61,7 @@ const DashboardPage = () => {
     try {
       await updateRouteFavoriteStatus( id, favorite );
       dispatch( toggleFavorite( id ) );
-      if ( selectRoute && selectRoute.id === id ) {
-        dispatch( setSelectedRoute( { ...selectRoute, favorite } ) );
+      if ( selectRoute && selectRoute.id === id ) {dispatch( setSelectedRoute( { ...selectRoute, favorite } ) );
       }
     } catch ( error ) {
       console.error( 'Failed to update favorite status:', error );
@@ -91,6 +92,7 @@ const DashboardPage = () => {
               <RouteList
                 routes={routes}
                 onRouteSelect={handleSelectRoute}
+                onFavoriteToggle={handleFavoriteToggle}
                 selectRouteId={selectRoute?.id}
               />
               <Divider orientation={isSmallScreen ? 'horizontal' : 'vertical'} flexItem />

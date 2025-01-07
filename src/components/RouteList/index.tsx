@@ -1,24 +1,27 @@
 import { useState } from 'react';
-import { Box } from '@mui/material';
+import clsx from 'clsx';
+import { CiSearch } from 'react-icons/ci';
 
-import { Route } from '../store/routesSlice.ts';
+import { Route } from '@/store/routesSlice.ts';
 
-import SearchInput from './SearchInput.tsx';
-import RouteCard from './RouteСard.tsx';
+import CustomInput from '@components/CustomInput';
+import RouteCard from '@components/RouteCard';
 
+import styles from './index.module.css';
 
 interface RouteListProps {
     routes: Route[];
     onRouteSelect: ( route: Route ) => void;
     selectRouteId: string | null | undefined;
+    onFavoriteToggle: ( id: string, favorite: boolean ) => void;
 }
 
-const RouteList = ( { routes, onRouteSelect, selectRouteId } : RouteListProps ) => {
+const RouteList = ( { routes, onRouteSelect, selectRouteId, onFavoriteToggle } : RouteListProps ) => {
   const [ searchQuery, setSearchQuery ] = useState( '' );
 
   const filteredRoutes = routes.filter( route =>
     route.title.toLowerCase().includes( searchQuery.toLowerCase() ) ||
-      route.fullDescription.toLowerCase().includes( searchQuery.toLowerCase() )
+        route.fullDescription.toLowerCase().includes( searchQuery.toLowerCase() )
   );
 
   const sortedRoutes = filteredRoutes.sort( ( a, b ) => ( b.favorite ? 1 : 0 ) - ( a.favorite ? 1 : 0 ) );
@@ -27,26 +30,31 @@ const RouteList = ( { routes, onRouteSelect, selectRouteId } : RouteListProps ) 
     onRouteSelect( route );
   };
 
+
   return (
-    <div className="block">
-      <SearchInput
+    <div className={styles.half_block}>
+      <CustomInput
         value={searchQuery}
         onChange={( e ) => setSearchQuery( e.target.value )}
+        removeBtn
+        placeholder="Search..."
+        leftIcon={<CiSearch />}
       />
       <div
-        className="block_left scrollable-content"
+        className={clsx( 'scrollable-content', styles.block_left )}
       >
         {sortedRoutes.map( ( route ) => (
-          <Box
+          <div
             key={route.id}
             onClick={() => handleSelectRoute( route )}
-            className="list_item"
+            className={styles.list_item}
           >
             <RouteCard
               route={route}
               selectRouteId={selectRouteId}
+              onFavoriteToggle={onFavoriteToggle}
             />
-          </Box>
+          </div>
         ) )}
       </div>
     </div>
@@ -56,3 +64,4 @@ const RouteList = ( { routes, onRouteSelect, selectRouteId } : RouteListProps ) 
 };
 
 export default RouteList;
+

@@ -6,7 +6,7 @@ import Map from './Map.tsx';
 
 import { Route } from '../store/routesSlice.ts';
 import EmptyContent from './EmptyContent.tsx';
-import { formatDistance } from '../helpers';
+import { formatDistance } from '@/helpers';
 
 
 interface RouteDetailProps {
@@ -34,19 +34,16 @@ const RouteDetails = ( { route, onFavoriteToggle, onDelete } : RouteDetailProps 
 
       className="block scrollable-content block_right"
     >
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        marginBottom="0.5em"
+      <div
+        className="details-header"
       >
-        <Typography variant="h5">
+        <Typography variant="h5" className="title">
           {route.title}
         </Typography>
-        <Typography variant="h5">
+        <Typography variant="h5" className="distance">
           {formatDistance( route.length )}
         </Typography>
-      </Box>
+      </div>
       <Typography variant="body1" color="text.secondary" >
         {route.fullDescription}
       </Typography>
