@@ -1,0 +1,28 @@
+.dashboard_page {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+.container {
+    padding: 0 2.5rem 1.875rem 2.5rem;
+    height: 100%;
+}
+.content {
+    display: flex;
+    height: 100%;
+}
+
+@media (max-width: 900px) {
+    .content {
+        flex-direction: column;
+    }
+    .dashboard_page {
+        overflow: scroll;
+    }
+}
+@media (max-width: 610px) {
+    .container {
+        padding: 0 1.25rem 2rem 1.25rem;
+    }
+}

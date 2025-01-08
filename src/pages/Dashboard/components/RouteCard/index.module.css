@@ -63,3 +63,19 @@
         color: var(--color-white);
     }
 }
+
+@media (max-width: 1180px) {
+    .card_container {
+        grid-template-columns: 0.7fr 3.8fr 1.5fr 0.5fr;
+        min-height: 100px;
+        max-height: 100px;
+        .card_text {
+            -webkit-line-clamp: 2;
+        }
+    }
+}
+@media (max-width: 610px) {
+    .card_container {
+        grid-template-columns: 0.7fr 3.8fr 1.5fr 0.5fr;
+    }
+}

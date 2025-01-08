@@ -9,11 +9,16 @@ type Props = {
     onClick?: () => void;
     type?: 'submit' | 'reset' | 'button' | undefined;
     variant?: 'primary' | 'secondary' | 'ghost' | 'uppercase' | 'icon' | string;
+    size?: 'sm' | 'md' | 'lg' | string;
     disabled?: boolean;
     icon?: React.ReactElement;
 }
-const Button = ( { children, type, variant, onClick, disabled, icon } : Props ) => {
-  const buttonClassName = clsx( styles.btn, variant && styles[variant] );
+const Button = ( { children, type, variant, onClick, disabled, size = 'lg', icon } : Props ) => {
+  const buttonClassName = clsx(
+    styles.btn,
+    variant && styles[variant],
+    size && styles[size]
+  );
 
   return (
     <button

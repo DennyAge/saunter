@@ -1,0 +1,39 @@
+.half_block {
+    flex: 1;
+    height: 100%;
+    max-height: calc(100vh - 6rem);
+    overflow-y: auto;
+}
+.details_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.details_title {
+
+}
+.details_distance {
+
+}
+.details_text {
+    margin-bottom: 2rem;
+}
+.map_box {
+    width: 100%;
+    margin-bottom: 3rem;
+}
+.details_footer {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+    padding-bottom: 1rem;
+}
+
+@media (max-width: 900px) {
+    .half_block {
+        height: 100%;
+        overflow: visible;
+    }
+
+}

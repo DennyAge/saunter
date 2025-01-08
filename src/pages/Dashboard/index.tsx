@@ -1,17 +1,24 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { Divider, useMediaQuery } from '@mui/material';
+
 
 import { addRoute, deleteRoute, toggleFavorite, setSelectedRoute, Route } from '@/store/routesSlice.ts';
 import { RootState } from '@/store';
-import { fetchRoutes, addRouteToFirebase, updateRouteFavoriteStatus, deleteRouteFromFirebase } from '@/services/firebaseService.ts';
+import {
+  fetchRoutes,
+  addRouteToFirebase, 
+  updateRouteFavoriteStatus,
+  deleteRouteFromFirebase } from '@/services/firebaseService.ts';
 
 import Header from '@/components/Header';
-import RouteList from '@/components/RouteList';
-import RouteDetails from '@/components/RouteDetails.tsx';
+import RouteList from './components/RouteList';
+import RouteDetails from './components/RouteDetails';
 import AddRouteModal, { AddRoute } from '@/components/AddRouteModal.tsx';
 import EmptyContent from '@/components/EmptyContent/';
 import Loader from '@components/Loader';
+import Divider from '@components/Divider';
+
+import styles from './index.module.css';
 
 
 
@@ -22,7 +29,18 @@ const DashboardPage = () => {
   const [ openAddModal, setOpenAddModal ] = useState( false );
   const [ isLoading, setIsLoading ] = useState( false );
 
-  const isSmallScreen = useMediaQuery( '(max-width:900px)' );
+  const [ isSmallScreen, setIsSmallScreen ] = useState( false );
+
+  const checkScreenSize = () => {
+    setIsSmallScreen( window.innerWidth < 900 );
+  };
+
+  useEffect( () => {
+    checkScreenSize();
+    window.addEventListener( 'resize', checkScreenSize );
+    return () => window.removeEventListener( 'resize', checkScreenSize );
+  }, [] );
+
 
   useEffect( () => {
     const loadRoutes = async () => {
@@ -81,31 +99,30 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="main">
+    <div className={styles.dashboard_page}>
       {isLoading && <Loader />}
-      <div className="content">
-        <Header openModal={setOpenAddModal} />
-        <div className="content__container">
-          <Divider orientation="horizontal" flexItem className="divider" />
-          {routes.length ? (
-            <div className="page__content">
-              <RouteList
-                routes={routes}
-                onRouteSelect={handleSelectRoute}
-                onFavoriteToggle={handleFavoriteToggle}
-                selectRouteId={selectRoute?.id}
-              />
-              <Divider orientation={isSmallScreen ? 'horizontal' : 'vertical'} flexItem />
-              <RouteDetails
-                route={selectRoute}
-                onFavoriteToggle={handleFavoriteToggle}
-                onDelete={handleDeleteRoute}
-              />
-            </div>
-          ) : (
-            <EmptyContent text="Please add new path" />
-          )}
-        </div>
+      <Header openModal={setOpenAddModal} />
+
+      <div className={styles.container}>
+        <Divider orientation="horizontal"   />
+        {routes.length ? (
+          <div className={styles.content}>
+            <RouteList
+              routes={routes}
+              onRouteSelect={handleSelectRoute}
+              onFavoriteToggle={handleFavoriteToggle}
+              selectRouteId={selectRoute?.id}
+            />
+            <Divider orientation={isSmallScreen ? 'horizontal' : 'vertical'}  />
+            <RouteDetails
+              route={selectRoute}
+              onFavoriteToggle={handleFavoriteToggle}
+              onDelete={handleDeleteRoute}
+            />
+          </div>
+        ) : (
+          <EmptyContent text="Please add new path" />
+        )}
       </div>
       <AddRouteModal
         onClose={setOpenAddModal}

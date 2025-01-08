@@ -5,7 +5,7 @@ import { CiSearch } from 'react-icons/ci';
 import { Route } from '@/store/routesSlice.ts';
 
 import CustomInput from '@components/CustomInput';
-import RouteCard from '@components/RouteCard';
+import RouteCard from '../RouteCard';
 
 import styles from './index.module.css';
 
