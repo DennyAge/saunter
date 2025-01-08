@@ -6,7 +6,7 @@ import { addRoute, deleteRoute, toggleFavorite, setSelectedRoute, Route } from '
 import { RootState } from '@/store';
 import {
   fetchRoutes,
-  addRouteToFirebase, 
+  addRouteToFirebase,
   updateRouteFavoriteStatus,
   deleteRouteFromFirebase } from '@/services/firebaseService.ts';
 
