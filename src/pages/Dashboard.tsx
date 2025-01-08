@@ -6,11 +6,11 @@ import { addRoute, deleteRoute, toggleFavorite, setSelectedRoute, Route } from '
 import { RootState } from '@/store';
 import { fetchRoutes, addRouteToFirebase, updateRouteFavoriteStatus, deleteRouteFromFirebase } from '@/services/firebaseService.ts';
 
-import Header from '@/components/Header.tsx';
+import Header from '@/components/Header';
 import RouteList from '@/components/RouteList';
 import RouteDetails from '@/components/RouteDetails.tsx';
 import AddRouteModal, { AddRoute } from '@/components/AddRouteModal.tsx';
-import EmptyContent from '@/components/EmptyContent.tsx';
+import EmptyContent from '@/components/EmptyContent/';
 import Loader from '@components/Loader.tsx';
 
 

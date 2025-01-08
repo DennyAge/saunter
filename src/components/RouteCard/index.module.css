@@ -1,12 +1,12 @@
 .card_container {
     display: grid;
     align-items: center;
-    grid-template-columns: 0.7fr 4.3fr 1fr 0.5fr;
+    grid-template-columns: 0.5fr 4.5fr 1fr 0.5fr;
     overflow-wrap: break-word;
     word-break: break-word;
 
     cursor: pointer;
-    background-color: var(--grey);
+    background-color: var(--color-blue-25);
     padding: 16px;
     border-radius: 8px;
     min-height: 120px;
@@ -32,7 +32,7 @@
     margin: 0;
     border: none;
     background: transparent;
-    color: var(--black);
+    color: var(--color-black);
     cursor: pointer;
 }
 .card_text {
@@ -50,16 +50,16 @@
     text-align: right;
 }
 .card_container:hover {
-    background: var(--primary);
-    color: var(--white);
+    background: var(--color-primary);
+    color: var(--color-white);
     .favorite_btn {
-        color: var(--white);
+        color: var(--color-white);
     }
 }
 .active {
-    background: var(--primary);
-    color: var(--white);
+    background: var(--color-primary);
+    color: var(--color-white);
     .favorite_btn {
-        color: var(--white);
+        color: var(--color-white);
     }
 }

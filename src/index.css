@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
 
 :root {
-    --black: #000000;
-    --grey: #ECEBED;
-    --white: #FFFFFF;
-    --primary: #74ace3;
-    --error-color: #FF647C;
+    --color-black: #000000;
+    --color-grey: #ECEBED;
+    --color-white: #FFFFFF;
+    --color-blue-25: #E5E7FA;
+    --color-primary: #74ace3;
+    --color-error: #FF647C;
 }
 
 * {
@@ -19,8 +20,8 @@ html, body, body > div {
 }
 body {
     font-family: 'Poppins', sans-serif;
-    background: var(--white);
-    color: var(--black);
+    background: var(--color-white);
+    color: var(--color-black);
 }
 
 /** OPTIONAL **/
@@ -73,12 +74,12 @@ body {
     gap: 1.25rem;
     box-sizing: border-box;
 }
-.block {
-    flex: 1;
-    height: 100%;
-    overflow-wrap: break-word;
-    word-break: break-word;
-}
+/*.block {*/
+/*    flex: 1;*/
+/*    height: 100%;*/
+/*    overflow-wrap: break-word;*/
+/*    word-break: break-word;*/
+/*}*/
 /*.block_left {*/
 /*    max-height: calc(100vh - 11.875rem);*/
 /*    height: 100%;*/
@@ -110,7 +111,7 @@ body {
     align-items: center;
     grid-template-columns: 0.7fr 4.3fr 1fr 0.5fr;
     cursor: pointer;
-    background-color: var(--grey);
+    background-color: var(--color-grey);
     overflow-wrap: break-word;
     word-break: break-word;
 }
@@ -123,12 +124,12 @@ body {
 
 
 .card:hover {
-    background: var(--primary);
-    color: var(--white);
+    background: var(--color-primary);
+    color: var(--color-white);
 }
 .active {
-    background: var(--primary);
-    color: var(--white);
+    background: var(--color-primary);
+    color: var(--color-white);
 }
 
 /** DOVIDER **/
@@ -188,7 +189,7 @@ body {
     justify-content: center;
     gap: 1rem;
 
-    background: var(--grey);
+    background: var(--color-grey);
     border-radius: 0.2rem;
     width: 100%;
     max-width: 12rem;

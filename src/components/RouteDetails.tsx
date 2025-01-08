@@ -4,8 +4,8 @@ import Grid from '@mui/material/Grid2';
 
 import Map from './Map.tsx';
 
-import { Route } from '../store/routesSlice.ts';
-import EmptyContent from './EmptyContent.tsx';
+import { Route } from '@/store/routesSlice.ts';
+import EmptyContent from '@/components/EmptyContent';
 import { formatDistance } from '@/helpers';
 
 
