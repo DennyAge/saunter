@@ -11,7 +11,7 @@ import RouteList from '@/components/RouteList';
 import RouteDetails from '@/components/RouteDetails.tsx';
 import AddRouteModal, { AddRoute } from '@/components/AddRouteModal.tsx';
 import EmptyContent from '@/components/EmptyContent/';
-import Loader from '@components/Loader.tsx';
+import Loader from '@components/Loader';
 
 
 

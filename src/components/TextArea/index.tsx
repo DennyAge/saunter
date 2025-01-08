@@ -50,7 +50,7 @@ const TextArea = ( {
       />
       {( error || maxLength ) && <div className={styles.info_box}>
         <span className={styles.error}>{error}</span>
-        <span className={styles.limit}>Limit {value.lenght} of {maxLength}</span>
+        <span className={styles.limit}>Limit {value.length} of {maxLength}</span>
       </div>
       }
     </div>

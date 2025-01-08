@@ -10,7 +10,7 @@ import { useMediaQuery } from '@mui/material';
 import AddLocationIcon from '@mui/icons-material/AddLocation';
 
 import { MarkerData } from '../store/routesSlice';
-import Loader from './Loader.tsx';
+import Loader from '@components/Loader';
 
 
 interface MapWithRoutesProps {
