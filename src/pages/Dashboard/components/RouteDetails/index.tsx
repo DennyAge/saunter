@@ -12,7 +12,6 @@ import { formatDistance } from '@/helpers';
 
 import styles from './index.module.css';
 import clsx from 'clsx';
-import React from 'react';
 
 interface RouteDetailProps {
     route: Route | null;
