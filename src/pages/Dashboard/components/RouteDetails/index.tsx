@@ -22,12 +22,15 @@ interface RouteDetailProps {
 const RouteDetails = ( { route, onFavoriteToggle, onDelete } : RouteDetailProps ) => {
 
 
-  const handleFavoriteClick = ( route: Route, favorite: boolean ) => {
+  const handleFavorite = ( route: Route, favorite: boolean ) => {
     onFavoriteToggle( route.id, favorite );
   };
 
-  const handleDeleteClick = ( route: Route ) => {
+  const handleDelete = ( route: Route ) => {
     onDelete( route.id );
+  };
+  const handleEdit = ( route: Route ) => {
+    console.log( route.id );
   };
 
   if ( !route ) {
@@ -59,7 +62,7 @@ const RouteDetails = ( { route, onFavoriteToggle, onDelete } : RouteDetailProps 
       </div>
 
       <Button
-        onClick={() => handleFavoriteClick( route, !route.favorite )}
+        onClick={() => handleFavorite( route, !route.favorite )}
         variant="primary"
         icon={route.favorite ? <FaStar/> : <FaRegStar/>}
       >
@@ -67,18 +70,19 @@ const RouteDetails = ( { route, onFavoriteToggle, onDelete } : RouteDetailProps 
       </Button>
       <div className={styles.details_footer}>
         <Button
-          onClick={() => handleDeleteClick( route )}
+          onClick={() => handleDelete( route )}
           variant="secondary"
           icon={<PiTrashLight/>}
         >
-                    Remove
+          Remove
         </Button>
         <Button
-          onClick={() => handleDeleteClick( route )}
+          onClick={() => handleEdit( route )}
           variant="secondary"
           icon={<MdOutlineModeEdit />}
+          disabled={true}
         >
-                    Edit
+          Edit
         </Button>
       </div>
     </div>

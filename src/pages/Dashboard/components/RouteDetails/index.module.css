@@ -1,7 +1,7 @@
 .half_block {
     flex: 1;
     height: 100%;
-    max-height: calc(100vh - 6rem);
+    max-height: calc(100vh - 7.5rem);
     overflow-y: auto;
 }
 .details_header {
@@ -11,12 +11,13 @@
     margin-bottom: 1rem;
 }
 .details_title {
-
+    font-size: 1.25rem;
 }
 .details_distance {
-
+    font-size: 1.25rem;
 }
 .details_text {
+    font-size: 1rem;
     margin-bottom: 2rem;
 }
 .map_box {
@@ -27,7 +28,6 @@
     display: flex;
     gap: 1rem;
     margin: 1rem 0;
-    padding-bottom: 1rem;
 }
 
 @media (max-width: 900px) {

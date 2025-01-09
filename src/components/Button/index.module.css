@@ -75,3 +75,9 @@
     width: fit-content;
     white-space: nowrap;
 }
+.btn:disabled {
+    background: var(--color-grey);
+    border-color: rgba(129, 127, 127, 0.63);
+    color: rgba(129, 127, 127, 0.63);
+    cursor: not-allowed;
+}

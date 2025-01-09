@@ -102,7 +102,6 @@ const DashboardPage = () => {
     <div className={styles.dashboard_page}>
       {isLoading && <Loader />}
       <Header openModal={setOpenAddModal} />
-
       <div className={styles.container}>
         <Divider orientation="horizontal"   />
         {routes.length ? (

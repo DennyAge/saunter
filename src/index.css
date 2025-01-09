@@ -2,7 +2,7 @@
 
 :root {
     --color-black: #000000;
-    --color-grey: #ECEBED;
+    --color-grey: rgba(146, 144, 149, 0.3);
     --color-white: #FFFFFF;
     --color-blue-25: #E5E7FA;
     --color-primary: #74ace3;
