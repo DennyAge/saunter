@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoIosClose } from 'react-icons/io';
 import { FaMapMarkedAlt } from 'react-icons/fa';
 
@@ -22,14 +22,15 @@ export interface AddRoute {
     markers: MarkerData[];
 }
 
-interface Props {
+interface AddRouteModalProps {
     onClose: ( b: boolean ) => void;
     open: boolean;
     onAddRoute: ( route: AddRoute ) => void ;
 }
 
 
-const AddRouteModal = ( { onClose, open, onAddRoute }: Props ) => {
+const AddRouteModal = ( { onClose, open, onAddRoute }: AddRouteModalProps ) => {
+  const [ isSmallScreen, setIsSmallScreen ] = useState( false );
   const [ formValues, setFormValues ] = useState<AddRoute>( {
     title: '',
     shortDescription: '',
@@ -44,7 +45,6 @@ const AddRouteModal = ( { onClose, open, onAddRoute }: Props ) => {
     fullDescription: '',
     markers: '',
   } );
-  const [ isSmallScreen, setIsSmallScreen ] = useState( false );
 
   useEffect( () => {
     if ( !open ) {
@@ -122,28 +122,12 @@ const AddRouteModal = ( { onClose, open, onAddRoute }: Props ) => {
     } ) );
   };
 
-  const modalRef = useRef<HTMLDivElement>( null ); // Создаем ref для модального окна
 
-  const handleClickOutside = ( event: MouseEvent ) => {
-    if ( modalRef.current && !modalRef.current.contains( event.target as Node ) ) {
-      onClose( false );
-    }
-  };
 
-  useEffect( () => {
-    if ( open ) {
-      document.addEventListener( 'mousedown', handleClickOutside );
-    } else {
-      document.removeEventListener( 'mousedown', handleClickOutside );
-    }
-    return () => {
-      document.removeEventListener( 'mousedown', handleClickOutside );
-    };
-  }, [ open ] );
 
   return (
     <div className={styles.modal}>
-      <div className={styles.modal_content} ref={modalRef}>
+      <div className={styles.modal_content} >
         <div className={styles.modal_header}>
           <h6>Add New Path</h6>
           <div>
@@ -195,11 +179,11 @@ const AddRouteModal = ( { onClose, open, onAddRoute }: Props ) => {
               </div>
 
               <Button variant="primary">
-                      Add Path
+                  Add Path
               </Button>
             </div> }
           </form>
-          <Divider orientation={isSmallScreen ? 'horizontal' : 'vertical'} />
+          <Divider orientation={isSmallScreen ? 'horizontal' : 'vertical'}/>
           <div className={styles.modal_map}>
             <Map
               markers={formValues.markers}
@@ -224,9 +208,7 @@ const AddRouteModal = ( { onClose, open, onAddRoute }: Props ) => {
         </div>
       </div>
     </div>
-  )
-  ;
-
+  );
 };
 
 export default AddRouteModal;
