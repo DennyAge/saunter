@@ -16,11 +16,12 @@ import Loader from '@components/Loader';
 interface MapWithRoutesProps {
   markers: MarkerData[];
   isEditing: boolean;
+  textError?: string;
   onMarkersChange: ( markers: MarkerData[], length: number ) => void;
 }
 const LIBRARIES: ( 'places' | 'geometry' )[] = [ 'places', 'geometry' ];
 
-const Map = ( { markers, isEditing, onMarkersChange }: MapWithRoutesProps ) => {
+const Map = ( { markers, isEditing, textError, onMarkersChange }: MapWithRoutesProps ) => {
   const [ directions, setDirections ] = useState<google.maps.DirectionsResult | null>( null );
   const [ distance, setDistance ] = useState<number>( 0 );
   const isSmScreen = useMediaQuery( '(max-height:900px)' );
@@ -145,6 +146,9 @@ const Map = ( { markers, isEditing, onMarkersChange }: MapWithRoutesProps ) => {
         ) )}
         {renderPolyline()}
       </GoogleMap>
+      <div className="map_controls">
+        {textError && <span>{textError}</span>}
+      </div>
     </div>
   );
 };

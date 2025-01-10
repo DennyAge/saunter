@@ -9,6 +9,7 @@ type CustomInputProps = {
     value: string | number;
     placeholder?: string;
     label?: string;
+    name?: string;
     error?: string;
     required?: boolean | undefined;
     type?: string;
@@ -27,6 +28,7 @@ const Input = ( {
   value,
   placeholder,
   className,
+  name,
   label,
   error,
   type,
@@ -72,6 +74,7 @@ const Input = ( {
           ref={inputRef}
           type={type}
           value={value}
+          name={name}
           readOnly={readOnly}
           placeholder={placeholder}
           onChange={onChange}

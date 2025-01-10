@@ -13,7 +13,7 @@ import {
 import Header from '@/components/Header';
 import RouteList from './components/RouteList';
 import RouteDetails from './components/RouteDetails';
-import AddRouteModal, { AddRoute } from '@/components/AddRouteModal.tsx';
+import AddRouteModal, { AddRoute } from './components/AddRouteModal';
 import EmptyContent from '@/components/EmptyContent/';
 import Loader from '@components/Loader';
 import Divider from '@components/Divider';
@@ -123,11 +123,11 @@ const DashboardPage = () => {
           <EmptyContent text="Please add new path" />
         )}
       </div>
-      <AddRouteModal
+      {openAddModal && <AddRouteModal
         onClose={setOpenAddModal}
         open={openAddModal}
         onAddRoute={handleAddRoute}
-      />
+      />}
     </div>
   );
 };

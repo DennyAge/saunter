@@ -46,6 +46,11 @@ body {
     width: 100%;
     max-width: 12rem;
 }
+.map_controls {
+    margin-top: 0.5rem;
+    font-size: 0.7rem;
+    color: var(--color-error);
+}
 /** SCROLL **/
 .scrollable-content::-webkit-scrollbar {
     width: 0.625rem;
