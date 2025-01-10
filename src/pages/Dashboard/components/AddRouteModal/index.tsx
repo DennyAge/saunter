@@ -199,7 +199,7 @@ const AddRouteModal = ( { onClose, open, onAddRoute }: Props ) => {
               </Button>
             </div> }
           </form>
-          <Divider orientation={isSmallScreen ? 'horizontal' : 'vertical'}/>
+          <Divider orientation={isSmallScreen ? 'horizontal' : 'vertical'} />
           <div className={styles.modal_map}>
             <Map
               markers={formValues.markers}
